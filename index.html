@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Video Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #1877f2;
+            --secondary: #42b72a;
+            --dark: #1c1e21;
+            --light: #f0f2f5;
+            --gray: #65676b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .download-form {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        .download-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .input-group {
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group:focus-within {
+            border-color: var(--primary);
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .input-group button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group button:hover {
+            background-color: #166fe5;
+        }
+        
+        .result {
+            display: none;
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 2rem auto 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result.active {
+            display: block;
+        }
+        
+        .video-info {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .thumbnail {
+            width: 200px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .thumbnail:hover img {
+            transform: scale(1.05);
+        }
+        
+        .video-details {
+            flex: 1;
+        }
+        
+        .video-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .video-details p {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .download-btn:hover {
+            background-color: #36a420;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #ff4d4f;
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            animation: shake 0.5s ease;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        footer {
+            background-color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer p {
+            color: var(--gray);
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-5px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(5px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .video-info {
+                flex-direction: column;
+            }
+            
+            .thumbnail {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16/9;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fab fa-facebook"></i>
+                    <h1>FB Video Downloader</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="#" style="color: var(--primary); font-weight: 600;">Home</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <section class="hero animate__animated animate__fadeIn">
+                <h2>Download Facebook Videos in HD Quality</h2>
+                <p>Paste the link of the Facebook video you want to download and get it in high quality with just one click.</p>
+            </section>
+            
+            <section class="download-form animate__animated animate__fadeInUp">
+                <div class="form-group">
+                    <label for="video-url">Facebook Video URL</label>
+                    <div class="input-group">
+                        <input type="url" id="video-url" placeholder="https://www.facebook.com/watch?v=..." required>
+                        <button id="download-btn"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Processing your video...</p>
+            </div>
+            
+            <div class="error-message"></div>
+            
+            <section class="result">
+                <div class="video-info">
+                    <div class="thumbnail">
+                        <img id="thumbnail" src="" alt="Video Thumbnail">
+                    </div>
+                    <div class="video-details">
+                        <h3 id="video-title">Video Title</h3>
+                        <p id="video-uploader">Uploaded by: Page Name</p>
+                        <button id="direct-download" class="download-btn">
+                            <i class="fas fa-download"></i> Download Now
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 FB Video Downloader. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('download-btn');
+            const videoUrlInput = document.getElementById('video-url');
+            const resultSection = document.querySelector('.result');
+            const loadingSection = document.querySelector('.loading');
+            const errorMessage = document.querySelector('.error-message');
+            const directDownloadBtn = document.getElementById('direct-download');
+            
+            downloadBtn.addEventListener('click', fetchVideoInfo);
+            videoUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    fetchVideoInfo();
+                }
+            });
+            
+            function fetchVideoInfo() {
+                const videoUrl = videoUrlInput.value.trim();
+                
+                if (!videoUrl) {
+                    showError('Please enter a valid Facebook video URL');
+                    return;
+                }
+                
+                // Hide previous results/errors and show loading
+                resultSection.classList.remove('active');
+                errorMessage.textContent = '';
+                loadingSection.classList.add('active');
+                
+                // Call the API
+                fetch(`/download?url=${encodeURIComponent(videoUrl)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        loadingSection.classList.remove('active');
+                        
+                        if (data.success) {
+                            // Display the video info
+                            document.getElementById('video-title').textContent = data.title;
+                            document.getElementById('video-uploader').textContent = `Uploaded by: ${data.uploader}`;
+                            document.getElementById('thumbnail').src = data.thumbnail_url;
+                            directDownloadBtn.onclick = function() {
+                                window.location.href = data.download_url;
+                            };
+                            
+                            resultSection.classList.add('active');
+                            resultSection.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            showError(data.error || 'Failed to process video. Please check the URL and try again.');
+                        }
+                    })
+                    .catch(error => {
+                        loadingSection.classList.remove('active');
+                        showError('An error occurred. Please try again later.');
+                        console.error('Error:', error);
+                    });
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => {
+                    errorMessage.classList.remove('animate__animated', 'animate__shakeX');
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+  </html>
